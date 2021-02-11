@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Dropdown from "react-dropdown";
 import parse from "html-react-parser";
+import { fetchShow } from "./api/fetchShow";
 
 import { formatSeasons } from "./utils/formatSeasons";
 
@@ -14,18 +14,21 @@ export default function App() {
   const [selectedSeason, setSelectedSeason] = useState("");
   const episodes = seasons[selectedSeason] || [];
 
+    // const apiUrl = `https://api.tvmaze.com/singlesearch/shows?q=stranger-things&embed=episodes`;
+  // const apiUrl = `http://api.tvmaze.com/singlesearch/shows?q=moesha&embed=episodes`;
+  const apiUrl = `http://api.tvmaze.com/singlesearch/shows?q=malcolm-in-the-middle&embed=episodes`;
+  const apiUrl_1 = `http://api.tvmaze.com/singlesearch/shows?q=survivor&embed=episodes`;
+
   useEffect(() => {
-    const fetchShow = () => {
-      axios
-        .get(
-          "https://api.tvmaze.com/singlesearch/shows?q=stranger-things&embed=episodes"
-        )
-        .then(res => {
-          setShow(res.data);
-          setSeasons(formatSeasons(res.data._embedded.episodes));
-        });
-    };
-    fetchShow();
+    fetchShow(apiUrl_1)
+      .then(res => {
+        console.log(res.data);
+        setShow(res.data);
+        setSeasons(formatSeasons(res.data._embedded.episodes));
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }, []);
 
   const handleSelect = e => {
